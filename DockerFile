@@ -28,4 +28,4 @@ RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --gid 1001 appuser
 USER appuser
 
-ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.coffeeshop.CoffeeShopBackendApplication"]
+ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.coffeeshop.CoffeeShopApplication"]
