@@ -13,7 +13,8 @@ COPY src src
 
 # Build the application
 RUN ./gradlew build -x test
-RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
+RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/coffee-shop-backend-0.0.1-SNAPSHOT.jar)
+RUN jar -tf build/libs/coffee-shop-backend-0.0.1-SNAPSHOT.jar
 
 FROM eclipse-temurin:17-jre
 VOLUME /tmp
@@ -23,8 +24,8 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 # Run as non-root user for security
-RUN addgroup --system --gid 1001 appgroup && \\
+RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 --gid 1001 appuser
 USER appuser
 
-ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.coffeeshop.CoffeeShopApplication"]
+ENTRYPOINT ["java", "-cp", "app:app/lib/*", "com.coffeeshop.CoffeeShopBackendApplication"]
