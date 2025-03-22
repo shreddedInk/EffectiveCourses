@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: coffee-shop-backend
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/coffeeshopdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    networks:
+      - coffee-shop-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: coffee-shop-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=coffeeshopdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - coffee-shop-network
+    restart: unless-stopped
+
+networks:
+  coffee-shop-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
