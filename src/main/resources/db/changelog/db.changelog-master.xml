@@ -7,28 +7,14 @@ xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     <include file="changes/001-initial-schema.xml" relativeToChangelogFile="true"/>
     <include file="changes/003-test-products.xml" relativeToChangelogFile="true"/>
 
-    <changeSet author="shopi (generated)" id="1742735603778-1">
-        <createTable tableName="product1">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="productsPK"/>
-            </column>
-            <column name="available" type="BOOLEAN">
-                <constraints nullable="false"/>
-            </column>
-            <column name="category" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="VARCHAR(1000)"/>
-            <column name="image_url" type="VARCHAR(255)"/>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="price" type="numeric(38, 2)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="test" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+
+    <changeSet author="shopi (generated)" id="1742736414638-2">
+        <dropTable tableName="product"/>
+    </changeSet>
+    <changeSet author="shopi (generated)" id="1742736414638-3">
+        <dropTable tableName="product1"/>
+    </changeSet>
+    <changeSet author="shopi (generated)" id="1742736414638-1">
+        <modifyDataType columnName="price" newDataType="number(38,2)" tableName="products"/>
     </changeSet>
 </databaseChangeLog>
