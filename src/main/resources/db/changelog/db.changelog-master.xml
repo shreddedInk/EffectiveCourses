@@ -1,11 +1,21 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-    <changeSet author="shopi (generated)" id="1742663287182-1">
-        <createTable tableName="products">
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+    <include file="changes/001-initial-schema.xml" relativeToChangelogFile="true"/>
+    <include file="changes/003-test-products.xml" relativeToChangelogFile="true"/>
+
+    <changeSet author="shopi (generated)" id="1742735603778-1">
+        <createTable tableName="product1">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="productsPK"/>
             </column>
             <column name="available" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="VARCHAR(1000)"/>
@@ -14,6 +24,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="price" type="numeric(38, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="test" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

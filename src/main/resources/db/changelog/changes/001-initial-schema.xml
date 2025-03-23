@@ -6,12 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <changeSet id="001" author="lab-student">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="products"/>
-            </not>
-        </preConditions>
-        <createTable tableName="products">
+        <createTable tableName="product">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -28,7 +23,7 @@
             </column>
         </createTable>
 
-        <insert tableName="products">
+        <insert tableName="product">
             <column name="name" value="Espresso"/>
             <column name="description" value="A concentrated coffee brewed by forcing hot water under pressure through finely ground coffee beans."/>
             <column name="price" value="2.50"/>

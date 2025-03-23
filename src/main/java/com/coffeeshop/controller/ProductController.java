@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/products")
@@ -34,5 +35,15 @@ public class ProductController {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/category/{category}")
+    @Operation(summary = "Get products by category", description = "Returns list of products by category")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String category) {
+        List<ProductDTO> products = productService.getProductsByCategory(category);
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
     }
 }

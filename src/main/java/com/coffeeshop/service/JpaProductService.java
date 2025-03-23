@@ -33,6 +33,13 @@ public class JpaProductService implements ProductService {
                 .map(this::convertToDTO);
     }
 
+    @Override
+    public List<ProductDTO> getProductsByCategory(String category) {
+        return productRepository.findByCategory(category).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private ProductDTO convertToDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
@@ -41,6 +48,7 @@ public class JpaProductService implements ProductService {
         dto.setPrice(product.getPrice());
         dto.setImageUrl(product.getImageUrl());
         dto.setAvailable(product.isAvailable());
+        dto.setCategory(product.getCategory());
         return dto;
     }
 }

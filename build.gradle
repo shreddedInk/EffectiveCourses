@@ -1,85 +1,77 @@
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.liquibase:liquibase-gradle-plugin:2.2.0"
-		classpath "org.liquibase.ext:liquibase-hibernate6:4.24.0"
-	}
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.liquibase:liquibase-gradle-plugin:2.2.0"
+        classpath "org.liquibase.ext:liquibase-hibernate6:4.24.0"
+    }
 }
 
 plugins {
-	id 'org.springframework.boot' version '3.4.3'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'org.liquibase.gradle' version '2.2.0'
-	id 'java'
+    id 'org.springframework.boot' version '3.4.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.liquibase.gradle' version '2.2.0'
+    id 'java'
 }
-apply plugin: 'org.liquibase.gradle'
 
 group = 'com.coffeeshop'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	//без нее в контроллере ошибки выдает
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-	// Spring Boot Core
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Spring Boot Core
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// Database
-	implementation 'org.postgresql:postgresql'
-	implementation 'org.liquibase:liquibase-core'
-	liquibaseRuntime 'org.postgresql:postgresql'
-	liquibaseRuntime 'info.picocli:picocli:4.7.5'
-	liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
-	liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate6:4.24.0'
-	liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
-	liquibaseRuntime 'org.springframework:spring-beans'
-	liquibaseRuntime 'org.springframework:spring-context'
-	liquibaseRuntime 'org.springframework.data:spring-data-jpa'
-	liquibaseRuntime 'jakarta.validation:jakarta.validation-api:3.0.2'
-	liquibaseRuntime 'org.javassist:javassist:3.29.2-GA'
-	liquibaseRuntime("org.postgresql:postgresql")
-	liquibaseRuntime sourceSets.main.output
+    // Database
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.liquibase:liquibase-core'
+    liquibaseRuntime 'org.postgresql:postgresql'
+    liquibaseRuntime 'info.picocli:picocli:4.7.5'
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
+    liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate6:4.24.0'
+    liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
+    liquibaseRuntime 'org.springframework:spring-beans'
+    liquibaseRuntime 'org.springframework:spring-context'
+    liquibaseRuntime 'org.springframework.data:spring-data-jpa'
+    liquibaseRuntime 'jakarta.validation:jakarta.validation-api:3.0.2'
+    liquibaseRuntime 'org.javassist:javassist:3.29.2-GA'
+    liquibaseRuntime sourceSets.main.output
 
+    // Documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 
-	// Documentation
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+    // Utility
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	// Utility
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
-	// Testing
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-configurations {
+    // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 liquibase {
-	activities {
-		main {
-			changelogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
-			url 'jdbc:postgresql://localhost:5432/coffeeshopdb'
-			username 'postgres'
-			password 'postgres'
-			referenceUrl 'hibernate:spring:com.coffeeshop.model?dialect=org.hibernate.dialect.PostgreSQLDialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
-		}
-	}
+    activities {
+        main {
+            changelogFile 'src/main/resources/db/changelog/db.changelog-master.xml'
+            url 'jdbc:postgresql://localhost:5432/coffeeshopdb'
+            username 'postgres'
+            password 'postgres'
+            referenceUrl 'hibernate:spring:com.coffeeshop.model?dialect=org.hibernate.dialect.PostgreSQLDialect&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy'
+        }
+    }
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
