@@ -1,5 +1,6 @@
 package com.coffeeshop.dto;
 
+import com.coffeeshop.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

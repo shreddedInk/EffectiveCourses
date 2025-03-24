@@ -1,6 +1,8 @@
 package com.coffeeshop.controller;
 
 import com.coffeeshop.dto.ProductDTO;
+import com.coffeeshop.model.Category;
+import com.coffeeshop.service.CategoryService;
 import com.coffeeshop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,11 +18,13 @@ import java.util.stream.Collectors;
 @Tag(name = "Products", description = "Product management APIs")
 public class ProductController {
 
+    private final CategoryService categoryService;
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -35,15 +39,5 @@ public class ProductController {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/category/{category}")
-    @Operation(summary = "Get products by category", description = "Returns list of products by category")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String category) {
-        List<ProductDTO> products = productService.getProductsByCategory(category);
-        if (products.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(products);
     }
 }

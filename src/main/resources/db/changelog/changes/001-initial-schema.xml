@@ -5,8 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
-    <changeSet id="001" author="lab-student">
-        <createTable tableName="product">
+    <changeSet id="001-create-products-table" author="miron">
+        <comment>Создание таблицы products с базовой структурой и тестовыми данными</comment>
+
+        <createTable tableName="products">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -23,12 +25,13 @@
             </column>
         </createTable>
 
-        <insert tableName="product">
+        <insert tableName="products">
             <column name="name" value="Espresso"/>
             <column name="description" value="A concentrated coffee brewed by forcing hot water under pressure through finely ground coffee beans."/>
             <column name="price" value="2.50"/>
             <column name="image_url" value="https://example.com/images/espresso.jpg"/>
         </insert>
+
     </changeSet>
 
 </databaseChangeLog>

@@ -6,7 +6,7 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <changeSet id="1" author="lab-student">
-        <createTable tableName="products">
+        <createTable tableName="test_products">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -28,7 +28,7 @@
     </changeSet>
 
     <changeSet id="2" author="lab-student">
-        <insert tableName="products">
+        <insert tableName="test_products">
             <column name="name" value="Espresso"/>
             <column name="description" value="Strong black coffee"/>
             <column name="price" value="2.50"/>
@@ -36,7 +36,7 @@
             <column name="available" value="true"/>
             <column name="category" value="Coffee"/>
         </insert>
-        <insert tableName="products">
+        <insert tableName="test_products">
             <column name="name" value="Cappuccino"/>
             <column name="description" value="Coffee with frothy milk"/>
             <column name="price" value="3.00"/>
@@ -44,7 +44,7 @@
             <column name="available" value="true"/>
             <column name="category" value="Coffee"/>
         </insert>
-        <insert tableName="products">
+        <insert tableName="test_products">
             <column name="name" value="Green Tea"/>
             <column name="description" value="Refreshing green tea"/>
             <column name="price" value="1.50"/>
@@ -52,7 +52,7 @@
             <column name="available" value="true"/>
             <column name="category" value="Tea"/>
         </insert>
-        <insert tableName="products">
+        <insert tableName="test_products">
             <column name="name" value="Chamomile Tea"/>
             <column name="description" value="Calming herbal tea"/>
             <column name="price" value="1.80"/>
@@ -60,7 +60,7 @@
             <column name="available" value="true"/>
             <column name="category" value="Tea"/>
         </insert>
-        <insert tableName="products">
+        <insert tableName="test_products">
             <column name="name" value="Chocolate Cake"/>
             <column name="description" value="Rich chocolate cake"/>
             <column name="price" value="4.50"/>
