@@ -2,6 +2,7 @@ package com.coffeeshop.controller;
 
 import com.coffeeshop.dto.ProductDTO;
 import com.coffeeshop.model.Category;
+import com.coffeeshop.model.Product;
 import com.coffeeshop.service.CategoryService;
 import com.coffeeshop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +20,11 @@ import java.util.stream.Collectors;
 @Tag(name = "Products", description = "Product management APIs")
 public class ProductController {
 
-    private final CategoryService categoryService;
     private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -39,5 +39,20 @@ public class ProductController {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+
+        List<Product> products = productService.findProductsByNameAndPriceRange(
+                name != null ? name : "",
+                minPrice,
+                maxPrice
+        );
+
+        return ResponseEntity.ok(products);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -110,5 +111,13 @@ public class JpaProductService implements ProductService {
         dto.setAvailable(product.isAvailable());
         dto.setCategory(product.getCategory() != null ? product.getCategory().getName() : null);
         return dto;
+    }
+
+    public List<Product> findProductsByNameAndPriceRange(String namePart, BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findProductsByNameAndPriceRange(
+                namePart,
+                minPrice != null ? minPrice : BigDecimal.ZERO,
+                maxPrice != null ? maxPrice : BigDecimal.valueOf(Double.MAX_VALUE)
+        );
     }
 }
