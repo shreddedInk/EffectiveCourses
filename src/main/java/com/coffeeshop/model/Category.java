@@ -22,6 +22,9 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private Boolean available = true;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products = new ArrayList<>();
 
