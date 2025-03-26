@@ -19,7 +19,7 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 
 @RestController
 @RequestMapping("/products")
-@Tag(name = "Products", description = "Product management APIs")
+@Tag(name = "Products", description = "API for managing products")
 public class ProductController {
 
     private final ProductService productService;
@@ -30,16 +30,14 @@ public class ProductController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all products",
-            description = "Returns paginated list of all products with sorting support")
+    @Operation(summary = "Get all products", description = "Retrieves a paginated list of all products with sorting support.")
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @PageableDefault(sort = "price", direction = ASC) Pageable pageable) {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get product by ID",
-            description = "Returns a single product by its ID")
+    @Operation(summary = "Get product by ID", description = "Retrieves a single product by its ID.")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         Optional<ProductDTO> productDTO = Optional.ofNullable(productService.getProductById(id));
         return productDTO.map(ResponseEntity::ok)
@@ -47,35 +45,24 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search products",
-            description = "Search products by name and price range with pagination and sorting")
+    @Operation(summary = "Search products", description = "Searches products by name and price range with pagination and sorting.")
     public ResponseEntity<Page<ProductDTO>> searchProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @PageableDefault(sort = "name", direction = ASC) Pageable pageable) {
-
-        return ResponseEntity.ok(productService.searchProductsByNameAndPriceRange(
-                name,
-                minPrice,
-                maxPrice,
-                pageable
-        ));
+        return ResponseEntity.ok(productService.searchProductsByNameAndPriceRange(name, minPrice, maxPrice, pageable));
     }
 
     @GetMapping("/category/{categoryId}")
-    @Operation(summary = "Get products by category",
-            description = "Returns paginated list of products by category ID")
+    @Operation(summary = "Get products by category", description = "Retrieves a paginated list of products by category ID.")
     public ResponseEntity<Page<ProductDTO>> getProductsByCategory(
             @PathVariable Long categoryId,
             @PageableDefault(sort = "price", direction = ASC) Pageable pageable) {
-
         Page<ProductDTO> products = productService.getProductsByCategory(categoryId, pageable);
-
         if (products.isEmpty()) {
             throw new ResourceNotFoundException("No products found for category id: " + categoryId);
         }
-
         return ResponseEntity.ok(products);
     }
 }

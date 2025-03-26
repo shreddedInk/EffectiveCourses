@@ -17,7 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/categories")
-@Tag(name = "Categories", description = "Category management APIs")
+@Tag(name = "Categories", description = "API for managing categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -28,15 +28,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a new category", description = "Creates a new category")
+    @Operation(summary = "Create a new category", description = "Creates a new category with the provided details.")
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO createdCategory = categoryService.createCategory(categoryDTO);
         return ResponseEntity.ok(createdCategory);
     }
 
     @GetMapping
-    @Operation(summary = "Get all categories",
-            description = "Returns paginated list of all categories with sorting support")
+    @Operation(summary = "Get all categories", description = "Retrieves a paginated list of all categories with sorting support.")
     public ResponseEntity<Page<CategoryDTO>> getAllCategories(
             @Parameter(description = "Pagination and sorting parameters")
             @PageableDefault(sort = "name", size = 20) Pageable pageable) {
@@ -44,18 +43,15 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Get category by ID",
-            description = "Returns a single category by its ID")
+    @Operation(summary = "Get category by ID", description = "Retrieves a single category by its ID.")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
         Optional<CategoryDTO> categoryDTO = Optional.ofNullable(categoryService.getCategoryById(id));
         return categoryDTO.map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
     }
 
-
     @GetMapping("/search")
-    @Operation(summary = "Search categories by name",
-            description = "Search categories by name with pagination and sorting")
+    @Operation(summary = "Search categories by name", description = "Searches categories by name with pagination and sorting.")
     public ResponseEntity<Page<CategoryDTO>> searchCategories(
             @RequestParam(required = false) String name,
             @Parameter(description = "Pagination and sorting parameters")
@@ -64,8 +60,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update category",
-            description = "Updates an existing category by its ID")
+    @Operation(summary = "Update category", description = "Updates an existing category by its ID.")
     public ResponseEntity<CategoryDTO> updateCategory(
             @PathVariable Long id,
             @RequestBody CategoryDTO categoryDTO) {
@@ -78,8 +73,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete category",
-            description = "Deletes a category by its ID")
+    @Operation(summary = "Delete category", description = "Deletes a category by its ID.")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
