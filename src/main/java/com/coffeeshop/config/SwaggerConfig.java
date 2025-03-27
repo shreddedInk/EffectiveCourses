@@ -17,7 +17,6 @@ public class SwaggerConfig {
                         .description("API for CoffeeShop")
                         .contact(new Contact()
                                 .name("student-miron")
-                                .email("mironmoskalenko2000@gmail.com"))
-                );
+                                .email("mironmoskalenko2000@gmail.com")));
     }
 }

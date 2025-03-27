@@ -12,30 +12,19 @@ import org.hibernate.ObjectNotFoundException;
 
 import java.util.stream.Collectors;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.coffeeshop.controller")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorsResponseDTO> handleResourceNotFound(
             ResourceNotFoundException ex, WebRequest request) {
-        ErrorsResponseDTO response = new ErrorsResponseDTO(
-                HttpStatus.NOT_FOUND.value(),
-                "Resource Not Found",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex, HttpStatus.NOT_FOUND, "Resource Not Found", request);
     }
-
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<ErrorsResponseDTO> handleValidation(
             ValidationException ex, WebRequest request) {
-        ErrorsResponseDTO response = new ErrorsResponseDTO(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Error",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, "Validation Error", request);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -44,35 +33,42 @@ public class GlobalExceptionHandler {
         String errorsMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .collect(Collectors.joining("; "));
-
-        ErrorsResponseDTO response = new ErrorsResponseDTO(
-                HttpStatus.BAD_REQUEST.value(),
-                "Validation Error",
-                errorsMessage,
-                request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(
+                new ErrorsResponseDTO(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "Validation Error",
+                        errorsMessage,
+                        request.getDescription(false).replace("uri=", "")),
+                HttpStatus.BAD_REQUEST
+        );
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<ErrorsResponseDTO> handleEntityNotFound(
             ObjectNotFoundException ex, WebRequest request) {
-        ErrorsResponseDTO response = new ErrorsResponseDTO(
-                HttpStatus.NOT_FOUND.value(),
-                "Entity Not Found",
-                ex.getMessage(),
-                request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return buildErrorResponse(ex, HttpStatus.NOT_FOUND, "Entity Not Found", request);
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorsResponseDTO> handleGlobalException(
             Exception ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+
+        if (path.contains("/swagger") || path.contains("/v3/api-docs") || path.contains("/api/v1/docs")) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return buildErrorResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", request);
+    }
+
+    private ResponseEntity<ErrorsResponseDTO> buildErrorResponse(
+            Exception ex, HttpStatus status, String error, WebRequest request) {
         ErrorsResponseDTO response = new ErrorsResponseDTO(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal Server Error",
-                "An unexpected error occurred",
-                request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                status.value(),
+                error,
+                ex.getMessage(),
+                request.getDescription(false).replace("uri=", "")
+        );
+        return new ResponseEntity<>(response, status);
     }
 }
