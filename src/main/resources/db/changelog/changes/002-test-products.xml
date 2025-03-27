@@ -1,0 +1,138 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
+
+    <!-- Создание таблицы категорий с проверкой существования -->
+    <changeSet id="001-create-categories" author="lab-student">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="categories"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="categories">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Заполнение категорий с проверкой пустой таблицы -->
+    <changeSet id="002-insert-categories" author="lab-student">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="categories"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM categories</sqlCheck>
+        </preConditions>
+
+        <insert tableName="categories">
+            <column name="name" value="Coffee"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="name" value="Tea"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="name" value="Dessert"/>
+        </insert>
+    </changeSet>
+
+    <!-- Создание таблицы продуктов с проверкой существования -->
+    <changeSet id="003-create-products" author="lab-student">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products"/>
+            </not>
+            <tableExists tableName="categories"/>
+        </preConditions>
+
+        <createTable tableName="products">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1000)"/>
+            <column name="price" type="decimal(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_url" type="varchar(255)"/>
+            <column name="available" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="category_id"
+                referencedTableName="categories"
+                referencedColumnNames="id"
+                constraintName="fk_product_category"
+                deferrable="false"
+                initiallyDeferred="false"/>
+    </changeSet>
+
+    <!-- Заполнение продуктов с проверкой пустой таблицы -->
+    <changeSet id="004-insert-products" author="lab-student">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="products"/>
+            <tableExists tableName="categories"/>
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM products</sqlCheck>
+        </preConditions>
+
+        <insert tableName="products">
+            <column name="name" value="Espresso"/>
+            <column name="description" value="Strong black coffee"/>
+            <column name="price" value="2.50"/>
+            <column name="image_url" value="/images/espresso.jpg"/>
+            <column name="available" value="true"/>
+            <column name="category_id" value="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="name" value="Cappuccino"/>
+            <column name="description" value="Coffee with frothy milk"/>
+            <column name="price" value="3.00"/>
+            <column name="image_url" value="/images/cappuccino.jpg"/>
+            <column name="available" value="true"/>
+            <column name="category_id" value="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="name" value="Green Tea"/>
+            <column name="description" value="Refreshing green tea"/>
+            <column name="price" value="1.50"/>
+            <column name="image_url" value="/images/green-tea.jpg"/>
+            <column name="available" value="true"/>
+            <column name="category_id" value="2"/>
+        </insert>
+        <insert tableName="products">
+            <column name="name" value="Chamomile Tea"/>
+            <column name="description" value="Calming herbal tea"/>
+            <column name="price" value="1.80"/>
+            <column name="image_url" value="/images/chamomile-tea.jpg"/>
+            <column name="available" value="true"/>
+            <column name="category_id" value="2"/>
+        </insert>
+        <insert tableName="products">
+            <column name="name" value="Chocolate Cake"/>
+            <column name="description" value="Rich chocolate cake"/>
+            <column name="price" value="4.50"/>
+            <column name="image_url" value="/images/chocolate-cake.jpg"/>
+            <column name="available" value="true"/>
+            <column name="category_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <!-- Индекс для category_id -->
+    <changeSet id="006-add-index-to-category_id" author="lab-student">
+        <createIndex indexName="idx_category_id" tableName="products">
+            <column name="category_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
