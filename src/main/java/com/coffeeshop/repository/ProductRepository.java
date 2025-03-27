@@ -30,6 +30,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByAvailableTrue();
 
+    Page<Product> findByCategory_Id(Long categoryId, Pageable pageable);
+
+
     List<Product> findByCategory(Category category);
 
     @Query("SELECT p FROM Product p " +

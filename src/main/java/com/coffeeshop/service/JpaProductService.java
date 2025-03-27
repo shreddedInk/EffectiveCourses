@@ -35,11 +35,13 @@ public class JpaProductService implements ProductService {
 
     @Override
     public Page<ProductDTO> getProductsByCategory(Long categoryId, Pageable pageable) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
-        return productRepository.findByCategory(category, pageable)
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new ResourceNotFoundException("Category not found with id: " + categoryId);
+        }
+        return productRepository.findByCategory_Id(categoryId, pageable)
                 .map(this::convertToDTO);
     }
+
 
     @Override
     public Page<ProductDTO> searchProductsByNameAndPriceRange(
@@ -129,7 +131,9 @@ public class JpaProductService implements ProductService {
         dto.setPrice(product.getPrice());
         dto.setImageUrl(product.getImageUrl());
         dto.setAvailable(product.isAvailable());
-        dto.setCategory(product.getCategory() != null ? product.getCategory() : null);
+        dto.setCategory(product.getCategory());
+
         return dto;
     }
+
 }

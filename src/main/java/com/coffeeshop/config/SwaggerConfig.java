@@ -15,7 +15,6 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(new Info().title("CoffeeShop API")
                         .description("API for CoffeeShop")
-                        .version(" ")
                         .contact(new Contact()
                                 .name("student-miron")
                                 .email("mironmoskalenko2000@gmail.com"))

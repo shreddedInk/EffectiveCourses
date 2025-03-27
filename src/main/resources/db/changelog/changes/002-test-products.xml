@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd">
 
     <!-- Создание таблицы категорий с проверкой существования -->
@@ -21,8 +19,6 @@
                 <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
-
-        <comment>Создание таблицы категорий и добавление базовых значений</comment>
     </changeSet>
 
     <!-- Заполнение категорий с проверкой пустой таблицы -->
@@ -96,7 +92,7 @@
             <column name="price" value="2.50"/>
             <column name="image_url" value="/images/espresso.jpg"/>
             <column name="available" value="true"/>
-            <column name="category_id" valueComputed="(SELECT id FROM categories WHERE name = 'Coffee')"/>
+            <column name="category_id" value="1"/>
         </insert>
         <insert tableName="products">
             <column name="name" value="Cappuccino"/>
@@ -104,7 +100,7 @@
             <column name="price" value="3.00"/>
             <column name="image_url" value="/images/cappuccino.jpg"/>
             <column name="available" value="true"/>
-            <column name="category_id" valueComputed="(SELECT id FROM categories WHERE name = 'Coffee')"/>
+            <column name="category_id" value="1"/>
         </insert>
         <insert tableName="products">
             <column name="name" value="Green Tea"/>
@@ -112,7 +108,7 @@
             <column name="price" value="1.50"/>
             <column name="image_url" value="/images/green-tea.jpg"/>
             <column name="available" value="true"/>
-            <column name="category_id" valueComputed="(SELECT id FROM categories WHERE name = 'Tea')"/>
+            <column name="category_id" value="2"/>
         </insert>
         <insert tableName="products">
             <column name="name" value="Chamomile Tea"/>
@@ -120,7 +116,7 @@
             <column name="price" value="1.80"/>
             <column name="image_url" value="/images/chamomile-tea.jpg"/>
             <column name="available" value="true"/>
-            <column name="category_id" valueComputed="(SELECT id FROM categories WHERE name = 'Tea')"/>
+            <column name="category_id" value="2"/>
         </insert>
         <insert tableName="products">
             <column name="name" value="Chocolate Cake"/>
@@ -128,15 +124,15 @@
             <column name="price" value="4.50"/>
             <column name="image_url" value="/images/chocolate-cake.jpg"/>
             <column name="available" value="true"/>
-            <column name="category_id" valueComputed="(SELECT id FROM categories WHERE name = 'Dessert')"/>
+            <column name="category_id" value="3"/>
         </insert>
     </changeSet>
 
-    <changeSet id="005-add-available-to-categories" author="lab-student">
-        <addColumn tableName="categories">
-            <column name="available" type="boolean" defaultValueBoolean="true">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
+    <!-- Индекс для category_id -->
+    <changeSet id="006-add-index-to-category_id" author="lab-student">
+        <createIndex indexName="idx_category_id" tableName="products">
+            <column name="category_id"/>
+        </createIndex>
     </changeSet>
+
 </databaseChangeLog>
